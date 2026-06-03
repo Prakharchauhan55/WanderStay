@@ -4,12 +4,14 @@ const mongoose = require("mongoose");
 const Listing = require("./models/listing.js");
 const path = require("path");
 const methodOverride = require("method-override");
-const
+const ejsMate = require("ejs-mate");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
+app.engine("ejs", ejsMate);
+app.use(express.static(path.join(__dirname, "/public")));
 
 main().then((res)=>{
     console.log("db is connected");
@@ -29,7 +31,7 @@ app.get("/", (req, res)=>{
 app.get("/listing", async(req, res) => {
     let allListings = await Listing.find({});
     res.render("listings/index.ejs", {allListings});
-})
+});
 
 // new route
 app.get("/listing/new", (req, res) => {
